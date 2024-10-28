@@ -1,7 +1,7 @@
-import 'package:bloc_example/blocs/counter/counter_event.dart';
-import 'package:bloc_example/blocs/counter/counter_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../notes_bloc/notes_event.dart';
+import '../notes_bloc/notes_state.dart';
 import '/notes_bloc/notes_bloc.dart';
 
 class NotesScreen extends StatelessWidget {

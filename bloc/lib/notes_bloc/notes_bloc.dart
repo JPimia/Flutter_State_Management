@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
-import 'package:bloc_example/blocs/counter/counter_event.dart';
-import 'package:bloc_example/blocs/counter/counter_state.dart';
+
+import 'package:bloc_example/notes_bloc/notes_event.dart';
+import 'package:bloc_example/notes_bloc/notes_state.dart';
 import 'package:equatable/equatable.dart';
 
 // NotesBloc
