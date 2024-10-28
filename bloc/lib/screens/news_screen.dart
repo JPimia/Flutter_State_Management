@@ -23,6 +23,7 @@ class NewsScreen extends StatelessWidget {
                 trailing: ElevatedButton(
                   onPressed: () {
                     // You can add more logic for "View" action here
+                    _showEditDialog(context, state.newsArticles[index], index);
                   },
                   child: Text("View"),
                 ),
@@ -31,6 +32,41 @@ class NewsScreen extends StatelessWidget {
           );
         }
         return Container();
+      },
+    );
+  }
+
+  void _showEditDialog(BuildContext context, String newsArticle, int index) {
+    final TextEditingController controller =
+        TextEditingController(text: newsArticle);
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("News Article"),
+          content: TextField(
+            controller: controller,
+            decoration: InputDecoration(hintText: "Enter news article"),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("Close"),
+            ),
+            TextButton(
+              onPressed: () {
+                context.read<NewsBloc>().add(
+                      EditNews(index, controller.text),
+                    );
+                Navigator.of(context).pop();
+              },
+              child: Text("Save"),
+            ),
+          ],
+        );
       },
     );
   }

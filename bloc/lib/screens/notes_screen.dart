@@ -1,4 +1,3 @@
-import 'package:bloc_example/blocs/counter/counter_bloc.dart';
 import 'package:bloc_example/blocs/counter/counter_event.dart';
 import 'package:bloc_example/blocs/counter/counter_state.dart';
 import 'package:flutter/material.dart';
@@ -17,14 +16,12 @@ class NotesScreen extends StatelessWidget {
             child: BlocBuilder<NotesBloc, NotesState>(
               builder: (context, state) {
                 if (state is NotesLoading) {
-                  // Display a loading spinner while notes are being loaded.
-                  // If loading state, show "Add Note" button instead of circular indicator
-                  return Center(
+                  return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text("No notes available. Please add a note."),
-                        const SizedBox(height: 16),
+                        SizedBox(height: 16),
                       ],
                     ),
                   );
@@ -41,7 +38,7 @@ class NotesScreen extends StatelessWidget {
                             // Edit button (could be hooked up to an edit action).
                             ElevatedButton(
                               onPressed: () {
-                                // Example edit logic: replace the note with "Edited Note"
+                                // replace the note with "Edited Note"
                                 context
                                     .read<NotesBloc>()
                                     .add(EditNote(index, 'Edited Note'));
@@ -49,7 +46,6 @@ class NotesScreen extends StatelessWidget {
                               child: Text("Edit"),
                             ),
                             const SizedBox(width: 8),
-                            // Delete button
                             ElevatedButton(
                               onPressed: () {
                                 context
@@ -81,6 +77,7 @@ class NotesScreen extends StatelessWidget {
               ),
             ],
           ),
+          const SizedBox(height: 8),
         ],
       ),
     );

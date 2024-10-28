@@ -9,7 +9,8 @@ abstract class NewsEvent extends Equatable {
 
 class LoadNews extends NewsEvent {}
 
-class ViewNews extends NewsEvent {
+class EditNews extends NewsEvent {
   final int index;
-  ViewNews(this.index);
+  final String newNewsArticle;
+  EditNews(this.index, this.newNewsArticle);
 }

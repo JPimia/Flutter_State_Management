@@ -11,7 +11,7 @@ void main() {
 
   testWidgets('Counter performance test', (WidgetTester tester) async {
     // Start the app.
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(MyApp());
 
     // Find the increment button using its key.
     final incrementButton = find.byKey(const Key('incrementButton'));
