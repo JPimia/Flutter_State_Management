@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             theme: state.isDarkMode ? ThemeData.dark() : ThemeData.light(),
-            home: HomeScreen(),
+            home: const HomeScreen(),
           );
         },
       ),
@@ -70,6 +70,8 @@ class MyApp extends StatelessWidget {
 }
 
 class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
+
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -78,8 +80,8 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    NotesScreen(),
-    NewsScreen(),
+    const NotesScreen(),
+    const NewsScreen(),
     SettingsScreen(),
   ];
 
@@ -92,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Flutter State Management")),
+      appBar: AppBar(title: const Text("Flutter State Management")),
       body: _screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,

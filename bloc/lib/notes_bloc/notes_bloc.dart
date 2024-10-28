@@ -5,22 +5,30 @@ import 'package:equatable/equatable.dart';
 
 // NotesBloc
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
-  final List<String> _notes = ["Header 1", "Header 2", "Header 3"];
+  List<String> _notes = [];
 
   NotesBloc() : super(NotesLoading()) {
     on<AddNote>((event, emit) {
       _notes.add(event.note);
-      emit(NotesLoaded(_notes));
+      emit(NotesLoaded(status: NoteStatus.success, notes: _notes));
     });
 
     on<EditNote>((event, emit) {
-      _notes[event.index] = event.newNote;
-      emit(NotesLoaded(_notes));
+      if (state is NotesLoaded) {
+        final updatedNotes = List<String>.from((state as NotesLoaded).notes);
+        updatedNotes[event.index] = event.newNote;
+        _notes = updatedNotes;
+        emit(NotesLoaded(notes: updatedNotes));
+      }
     });
 
     on<DeleteNote>((event, emit) {
-      _notes.removeAt(event.index);
-      emit(NotesLoaded(_notes));
+      if (state is NotesLoaded) {
+        final updatedNotes = List<String>.from((state as NotesLoaded).notes);
+        updatedNotes.removeAt(event.index);
+        _notes = updatedNotes;
+        emit(NotesLoaded(notes: updatedNotes));
+      }
     });
   }
 }
