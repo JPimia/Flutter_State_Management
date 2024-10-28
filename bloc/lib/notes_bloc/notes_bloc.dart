@@ -9,8 +9,10 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
   NotesBloc() : super(NotesLoading()) {
     on<AddNote>((event, emit) {
-      _notes.add(event.note);
-      emit(NotesLoaded(status: NoteStatus.success, notes: _notes));
+      final updatedNotes = List<String>.from(_notes);
+      updatedNotes.add(event.note);
+      _notes = updatedNotes;
+      emit(NotesLoaded(notes: updatedNotes));
     });
 
     on<EditNote>((event, emit) {
@@ -24,7 +26,7 @@ class NotesBloc extends Bloc<NotesEvent, NotesState> {
 
     on<DeleteNote>((event, emit) {
       if (state is NotesLoaded) {
-        final updatedNotes = List<String>.from((state as NotesLoaded).notes);
+        final updatedNotes = List<String>.from(_notes);
         updatedNotes.removeAt(event.index);
         _notes = updatedNotes;
         emit(NotesLoaded(notes: updatedNotes));
