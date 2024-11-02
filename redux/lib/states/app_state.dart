@@ -11,7 +11,6 @@ class AppState {
   AppState({
     this.notesState = const NotesState(),
     this.newsState = const NewsState(),
-    required bool isDarkMode,
-    required SettingsState settingsState,
-  }) : settingsState = SettingsState(isDarkMode: isDarkMode);
+    this.settingsState = const SettingsState(),
+  });
 }

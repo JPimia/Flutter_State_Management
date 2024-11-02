@@ -1,33 +1,35 @@
-import 'package:bloc_example/settings_bloc/settings_state.dart';
+import 'package:bloc_example/states/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '/notes_bloc/notes_bloc.dart';
-import '/news_bloc/news_bloc.dart';
-import '/settings_bloc/settings_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:redux/redux.dart';
+import 'reducers/app_reducer.dart';
 import 'screens/notes_screen.dart';
 import 'screens/news_screen.dart';
 import 'screens/settings_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  final store = Store<AppState>(
+    appReducer,
+    initialState: AppState(),
+  );
+
+  runApp(MyApp(store: store));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final Store<AppState> store;
+  const MyApp({super.key, required this.store});
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => NotesBloc()),
-        BlocProvider(create: (_) => NewsBloc()),
-        BlocProvider(create: (_) => SettingsBloc()),
-      ],
-      child: BlocBuilder<SettingsBloc, SettingsState>(
-        builder: (context, state) {
+    return StoreProvider(
+      store: store,
+      child: StoreConnector<AppState, bool>(
+        converter: (store) => store.state.settingsState?.isDarkMode ?? false,
+        builder: (context, isDarkMode) {
           return MaterialApp(
-            theme: state.isDarkMode ? ThemeData.dark() : ThemeData.light(),
-            home: HomeScreen(),
+            theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+            home: const HomeScreen(),
           );
         },
       ),
@@ -46,9 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    NotesScreen(),
-    NewsScreen(),
-    SettingsScreen(),
+    const NotesScreen(),
+    const NewsScreen(),
+    const SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
@@ -68,7 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.note), label: 'Notes'),
           BottomNavigationBarItem(icon: Icon(Icons.article), label: 'News'),
-          BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.settings), label: 'Settings'),
         ],
       ),
     );

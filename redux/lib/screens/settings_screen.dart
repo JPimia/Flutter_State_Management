@@ -1,22 +1,26 @@
-import 'package:bloc_example/settings_bloc/settings_event.dart';
-import 'package:bloc_example/settings_bloc/settings_state.dart';
+import 'package:bloc_example/actions/settings_actions.dart';
+import 'package:bloc_example/states/settings_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '/settings_bloc/settings_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import '../states/app_state.dart';
 
 class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<SettingsBloc, SettingsState>(
-      builder: (context, state) {
+    return StoreConnector<AppState, SettingsState>(
+      converter: (store) => store.state.settingsState!,
+      builder: (context, settingsState) {
         return Column(
           children: [
             ListTile(
-              title: Text("Dark Mode"),
+              title: const Text("Dark Mode"),
               trailing: Switch(
-                value: state.isDarkMode,
+                value: settingsState.isDarkMode,
                 onChanged: (value) {
-                  context.read<SettingsBloc>().add(ToggleDarkMode());
+                  StoreProvider.of<AppState>(context)
+                      .dispatch(ToggleDarkModeAction());
                 },
               ),
             ),

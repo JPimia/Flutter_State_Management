@@ -1,37 +1,38 @@
-import 'package:bloc_example/news_bloc/news_event.dart';
-import 'package:bloc_example/news_bloc/news_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '/news_bloc/news_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import '/actions/news_actions.dart';
+import '/states/app_state.dart';
+import '/states/news_state.dart';
 
 class NewsScreen extends StatelessWidget {
   const NewsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NewsBloc, NewsState>(
-      builder: (context, state) {
-        if (state is NewsLoading) {
-          context.read<NewsBloc>().add(LoadNews()); // Load the news articles
-          return Center(child: CircularProgressIndicator());
-        } else if (state is NewsLoaded) {
+    return StoreConnector<AppState, NewsState>(
+      converter: (store) => store.state.newsState,
+      builder: (context, newsState) {
+        if (newsState.newsArticles.isEmpty) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        } else {
           return ListView.builder(
-            itemCount: state.newsArticles.length,
+            itemCount: newsState.newsArticles.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(state.newsArticles[index]),
+                title: Text(newsState.newsArticles[index]),
                 trailing: ElevatedButton(
                   onPressed: () {
-                    // You can add more logic for "View" action here
-                    _showEditDialog(context, state.newsArticles[index], index);
+                    _showEditDialog(
+                        context, newsState.newsArticles[index], index);
                   },
-                  child: Text("View"),
+                  child: const Text("View"),
                 ),
               );
             },
           );
         }
-        return Container();
       },
     );
   }
@@ -44,26 +45,26 @@ class NewsScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("News Article"),
+          title: const Text("News Article"),
           content: TextField(
             controller: controller,
-            decoration: InputDecoration(hintText: "Enter news article"),
+            decoration: const InputDecoration(hintText: "Enter news article"),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Close"),
+              child: const Text("Close"),
             ),
             TextButton(
               onPressed: () {
-                context.read<NewsBloc>().add(
-                      EditNews(index, controller.text),
-                    );
+                StoreProvider.of<AppState>(context).dispatch(
+                  EditNewsAction(index, controller.text),
+                );
                 Navigator.of(context).pop();
               },
-              child: Text("Save"),
+              child: const Text("Save"),
             ),
           ],
         );

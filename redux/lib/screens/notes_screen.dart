@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../notes_bloc/notes_event.dart';
-import '../notes_bloc/notes_state.dart';
-import '/notes_bloc/notes_bloc.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import '../actions/notes_actions.dart';
+import '../states/app_state.dart';
 
 class NotesScreen extends StatelessWidget {
   const NotesScreen({super.key});
@@ -13,9 +12,11 @@ class NotesScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: BlocBuilder<NotesBloc, NotesState>(
-              builder: (context, state) {
-                if (state is NotesLoading) {
+            child: StoreConnector<AppState, List<String>>(
+              converter: (store) => store.state.notesState.notes,
+              builder: (context, notes) {
+                if (notes.isEmpty) {
+                  // Show a message if there are no notes
                   return const Center(
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -25,42 +26,40 @@ class NotesScreen extends StatelessWidget {
                       ],
                     ),
                   );
-                } else if (state is NotesLoaded) {
-                  // Display the list of notes once they are loaded.
+                } else {
+                  // Display the list of notes
                   return ListView.builder(
-                    itemCount: state.notes.length,
+                    itemCount: notes.length,
                     itemBuilder: (context, index) {
                       return ListTile(
-                        title: Text(state.notes[index]),
+                        title: Text(notes[index]),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            // Edit button (could be hooked up to an edit action).
+                            // Edit button
                             ElevatedButton(
                               onPressed: () {
-                                // replace the note with "Edited Note"
-                                context
-                                    .read<NotesBloc>()
-                                    .add(EditNote(index, 'Edited Note'));
+                                StoreProvider.of<AppState>(context).dispatch(
+                                  EditNoteAction(index, 'Edited Note'),
+                                );
                               },
-                              child: Text("Edit"),
+                              child: const Text("Edit"),
                             ),
                             const SizedBox(width: 8),
+                            // Delete button
                             ElevatedButton(
                               onPressed: () {
-                                context
-                                    .read<NotesBloc>()
-                                    .add(DeleteNote(index));
+                                StoreProvider.of<AppState>(context).dispatch(
+                                  DeleteNoteAction(index),
+                                );
                               },
-                              child: Text("Delete"),
+                              child: const Text("Delete"),
                             ),
                           ],
                         ),
                       );
                     },
                   );
-                } else {
-                  return Center(child: Text("Something went wrong!"));
                 }
               },
             ),
@@ -70,10 +69,12 @@ class NotesScreen extends StatelessWidget {
               const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: () {
-                  // Add a note when the button is pressed
-                  context.read<NotesBloc>().add(AddNote('New Note'));
+                  // Dispatch an action to add a new note
+                  StoreProvider.of<AppState>(context).dispatch(
+                    AddNoteAction('New Note'),
+                  );
                 },
-                child: Text("Add Note"),
+                child: const Text("Add Note"),
               ),
             ],
           ),

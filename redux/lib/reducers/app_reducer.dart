@@ -6,8 +6,8 @@ import 'settings_reducer.dart';
 
 AppState appReducer(AppState state, dynamic action) {
   return AppState(
-      notesState: notesReducer(state.notesState, action),
-      newsState: newsReducer(state.newsState, action),
-      settingsState: settingsReducer(state.settingsState, action),
-      isDarkMode: state.settingsState.isDarkMode);
+    notesState: notesReducer(state.notesState, action),
+    newsState: newsReducer(state.newsState, action),
+    settingsState: settingsReducer(state.settingsState, action),
+  );
 }
