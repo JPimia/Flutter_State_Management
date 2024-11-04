@@ -1,38 +1,27 @@
-import 'package:bloc_example/states/app_state.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'reducers/app_reducer.dart';
+import 'package:provider/provider.dart';
 import 'screens/notes_screen.dart';
 import 'screens/news_screen.dart';
 import 'screens/settings_screen.dart';
+import '/providers/notes_provider.dart';
+import '/providers/news_provider.dart';
+import '/providers/settings_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 void main() {
-  final store = Store<AppState>(
-    appReducer,
-    initialState: AppState(),
-  );
-
-  runApp(MyApp(store: store));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  final Store<AppState> store;
-  const MyApp({super.key, required this.store});
+class MyApp extends ConsumerWidget {
+  const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return StoreProvider(
-      store: store,
-      child: StoreConnector<AppState, bool>(
-        converter: (store) => store.state.settingsState.isDarkMode,
-        builder: (context, isDarkMode) {
-          return MaterialApp(
-            theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
-            home: const HomeScreen(),
-          );
-        },
-      ),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final isDarkMode = ref.watch(settingsProvider);
+
+    return MaterialApp(
+      theme: isDarkMode ? ThemeData.dark() : ThemeData.light(),
+      home: const HomeScreen(),
     );
   }
 }
@@ -50,7 +39,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const NotesScreen(),
     const NewsScreen(),
-    const SettingsScreen(),
+    SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
