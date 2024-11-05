@@ -1,4 +1,3 @@
-// app_state.dart
 import 'notes_state.dart';
 import 'news_state.dart';
 import 'settings_state.dart';

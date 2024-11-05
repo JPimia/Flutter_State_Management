@@ -1,6 +1,12 @@
-// news_actions.dart
 class EditNewsAction {
   final int index;
-  final String newNewsArticle;
-  EditNewsAction(this.index, this.newNewsArticle);
+  final String? newDescription;
+  EditNewsAction(this.index, this.newDescription);
+}
+
+class AddNewsAction {
+  final String title;
+  final String description;
+
+  AddNewsAction(this.title, this.description);
 }

@@ -9,31 +9,76 @@ class NewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, NewsState>(
-      converter: (store) => store.state.newsState,
-      builder: (context, newsState) {
-        if (newsState.newsArticles.isEmpty) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        } else {
-          return ListView.builder(
-            itemCount: newsState.newsArticles.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(newsState.newsArticles[index]),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    _showEditDialog(
-                        context, newsState.newsArticles[index], index);
-                  },
-                  child: const Text("View"),
-                ),
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              // Dispatch action to add new news item
+              StoreProvider.of<AppState>(context).dispatch(
+                AddNewsAction("New News Item", "Demo text 12321312321"),
               );
             },
-          );
-        }
-      },
+          ),
+        ],
+      ),
+      body: StoreConnector<AppState, NewsState>(
+        converter: (store) => store.state.newsState,
+        builder: (context, newsState) {
+          if (newsState.newsArticles.isEmpty) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            return ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: newsState.newsArticles.length,
+              itemBuilder: (context, index) {
+                final article = newsState.newsArticles[index];
+                return Card(
+                  elevation: 2,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          article.title!,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          article.description!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _showEditDialog(
+                                  context, article.description!, index);
+                            },
+                            child: const Text("View"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+        },
+      ),
     );
   }
 

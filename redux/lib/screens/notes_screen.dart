@@ -9,6 +9,19 @@ class NotesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              // Dispatch action to add new news item
+              StoreProvider.of<AppState>(context).dispatch(
+                AddNoteAction("New Note"),
+              );
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -64,21 +77,6 @@ class NotesScreen extends StatelessWidget {
               },
             ),
           ),
-          Row(
-            children: [
-              const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: () {
-                  // Dispatch an action to add a new note
-                  StoreProvider.of<AppState>(context).dispatch(
-                    AddNoteAction('New Note'),
-                  );
-                },
-                child: const Text("Add Note"),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
         ],
       ),
     );
