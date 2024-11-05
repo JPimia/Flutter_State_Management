@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '/providers/notes_provider.dart';
-import '/models/notes_model.dart';
 
 class NotesScreen extends ConsumerWidget {
   const NotesScreen({super.key});
@@ -42,7 +40,7 @@ class NotesScreen extends ConsumerWidget {
                                       .read(notesProvider.notifier)
                                       .editNote(index, "Edited Note");
                                 },
-                                child: Text("Edit"),
+                                child: const Text("Edit"),
                               ),
                               const SizedBox(width: 8),
                               ElevatedButton(
@@ -51,7 +49,7 @@ class NotesScreen extends ConsumerWidget {
                                       .read(notesProvider.notifier)
                                       .deleteNote(index);
                                 },
-                                child: Text("Delete"),
+                                child: const Text("Delete"),
                               ),
                             ],
                           ),
@@ -66,7 +64,7 @@ class NotesScreen extends ConsumerWidget {
                   // Add a note when the button is pressed
                   ref.read(notesProvider.notifier).addNote("New Note");
                 },
-                child: Text("Add Note"),
+                child: const Text("Add Note"),
               ),
             ],
           ),

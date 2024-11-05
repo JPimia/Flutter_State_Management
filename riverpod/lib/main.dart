@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'screens/notes_screen.dart';
 import 'screens/news_screen.dart';
 import 'screens/settings_screen.dart';
-import '/providers/notes_provider.dart';
-import '/providers/news_provider.dart';
 import '/providers/settings_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -39,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Widget> _screens = [
     const NotesScreen(),
     const NewsScreen(),
-    SettingsScreen(),
+    const SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {
