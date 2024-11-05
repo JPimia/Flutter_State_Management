@@ -6,12 +6,12 @@ final newsProvider =
     StateNotifierProvider<NewsModel, List<News>>((ref) => NewsModel());
 
 class NewsModel extends StateNotifier<List<News>> {
-  NewsModel() : super([]);
-  List<News> newsArticles = [
-    News(title: "News header 1"),
-    News(title: "News header 2"),
-    News(title: "News header 3"),
-  ];
+  NewsModel()
+      : super([
+          News(title: "News header 1"),
+          News(title: "News header 2"),
+          News(title: "News header 3"),
+        ]);
 
   List<News> get news => state;
 
