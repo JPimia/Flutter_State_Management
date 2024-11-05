@@ -8,27 +8,73 @@ class NewsScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final news = ref.watch(newsProvider);
-    return news.isEmpty
-        ? const Center(child: CircularProgressIndicator())
-        : ListView.builder(
-            itemCount: news.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(news[index].title),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    // You can add more logic for "View" action here
-                    _showEditDialog(context, news[index].title, index, ref);
-                  },
-                  child: const Text("View"),
-                ),
-              );
+
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              // Add logic to add new news item
+              ref
+                  .read(newsProvider.notifier)
+                  .addNews("New News Item", "Demo text 12321312321");
             },
-          );
+          ),
+        ],
+      ),
+      body: news.isEmpty
+          ? const Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: news.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 2,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          news[index].title!,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          news[index].description!,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _showEditDialog(context, news[index].description!,
+                                  index, ref);
+                            },
+                            child: const Text("View"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+    );
   }
 }
 
-void _showEditDialog(BuildContext context, String newsArticle, int index, ref) {
+void _showEditDialog(
+    BuildContext context, String newsArticle, int index, WidgetRef ref) {
   final TextEditingController controller =
       TextEditingController(text: newsArticle);
 
@@ -36,7 +82,7 @@ void _showEditDialog(BuildContext context, String newsArticle, int index, ref) {
     context: context,
     builder: (context) {
       return AlertDialog(
-        title: const Text("News Article"),
+        title: const Text("Edit News Article"),
         content: TextField(
           controller: controller,
           decoration: const InputDecoration(hintText: "Enter news article"),

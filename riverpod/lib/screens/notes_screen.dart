@@ -9,6 +9,16 @@ class NotesScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final notes = ref.watch(notesProvider);
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              ref.read(notesProvider.notifier).addNote("New Note");
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -32,7 +42,6 @@ class NotesScreen extends ConsumerWidget {
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              // Edit button (could be hooked up to an edit action).
                               ElevatedButton(
                                 onPressed: () {
                                   // replace the note with "Edited Note"
@@ -56,18 +65,6 @@ class NotesScreen extends ConsumerWidget {
                         );
                       },
                     )),
-          Row(
-            children: [
-              const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: () {
-                  // Add a note when the button is pressed
-                  ref.read(notesProvider.notifier).addNote("New Note");
-                },
-                child: const Text("Add Note"),
-              ),
-            ],
-          ),
           const SizedBox(height: 8),
         ],
       ),

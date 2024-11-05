@@ -7,9 +7,9 @@ final newsProvider =
 class NewsModel extends StateNotifier<List<News>> {
   NewsModel()
       : super([
-          News(title: "News header 1"),
-          News(title: "News header 2"),
-          News(title: "News header 3"),
+          News(title: "News 1", description: "demo description blablabla"),
+          News(title: "News 2", description: "demo description blablabla"),
+          News(title: "News 3", description: "demo description blablabla"),
         ]);
 
   List<News> get news => state;
@@ -17,7 +17,14 @@ class NewsModel extends StateNotifier<List<News>> {
   void editNews(int index, String newContent) {
     state = [
       for (int i = 0; i < state.length; i++)
-        if (i == index) News(title: newContent) else state[i]
+        if (i == index)
+          News(title: state[index].title, description: newContent)
+        else
+          state[i]
     ];
+  }
+
+  void addNews(String title, String description) {
+    state = [...state, News(title: title, description: description)];
   }
 }
