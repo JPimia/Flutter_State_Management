@@ -1,10 +1,8 @@
 import 'package:bloc/bloc.dart';
 
-import 'package:bloc_example/notes_bloc/notes_event.dart';
-import 'package:bloc_example/notes_bloc/notes_state.dart';
-import 'package:equatable/equatable.dart';
+import '/notes_bloc/notes_event.dart';
+import '/notes_bloc/notes_state.dart';
 
-// NotesBloc
 class NotesBloc extends Bloc<NotesEvent, NotesState> {
   List<String> _notes = [];
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '/providers/notes_provider.dart';
-import '/models/notes_model.dart';
 
 class NotesScreen extends StatelessWidget {
   const NotesScreen({super.key});
@@ -9,6 +8,16 @@ class NotesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              context.read<NotesProvider>().addNote("New Note");
+            },
+          ),
+        ],
+      ),
       body: Column(
         children: [
           Expanded(
@@ -58,19 +67,6 @@ class NotesScreen extends StatelessWidget {
               },
             ),
           ),
-          Row(
-            children: [
-              const SizedBox(width: 8),
-              ElevatedButton(
-                onPressed: () {
-                  // Add a note when the button is pressed
-                  context.read<NotesProvider>().addNote("New Note");
-                },
-                child: Text("Add Note"),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
         ],
       ),
     );

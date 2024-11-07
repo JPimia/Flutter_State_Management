@@ -5,6 +5,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '/settings_bloc/settings_bloc.dart';
 
 class SettingsScreen extends StatelessWidget {
+  const SettingsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<SettingsBloc, SettingsState>(
@@ -12,7 +14,7 @@ class SettingsScreen extends StatelessWidget {
         return Column(
           children: [
             ListTile(
-              title: Text("Dark Mode"),
+              title: const Text("Dark Mode"),
               trailing: Switch(
                 value: state.isDarkMode,
                 onChanged: (value) {

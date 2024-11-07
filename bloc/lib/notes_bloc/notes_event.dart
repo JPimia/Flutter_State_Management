@@ -1,7 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
-// Notes Events
 abstract class NotesEvent extends Equatable {
   @override
   List<Object> get props => [];

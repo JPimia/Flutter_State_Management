@@ -1,5 +1,5 @@
-import 'package:bloc_example/news_bloc/news_event.dart';
-import 'package:bloc_example/news_bloc/news_state.dart';
+import '/news_bloc/news_event.dart';
+import '/news_bloc/news_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '/news_bloc/news_bloc.dart';
@@ -9,61 +9,101 @@ class NewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<NewsBloc, NewsState>(
-      builder: (context, state) {
-        if (state is NewsLoading) {
-          context.read<NewsBloc>().add(LoadNews()); // Load the news articles
-          return Center(child: CircularProgressIndicator());
-        } else if (state is NewsLoaded) {
-          return ListView.builder(
-            itemCount: state.newsArticles.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(state.newsArticles[index]),
-                trailing: ElevatedButton(
-                  onPressed: () {
-                    // You can add more logic for "View" action here
-                    _showEditDialog(context, state.newsArticles[index], index);
-                  },
-                  child: Text("View"),
-                ),
-              );
+    return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.add),
+            onPressed: () {
+              context.read<NewsBloc>().add(AddNews("New News", "New Description"));
             },
-          );
-        }
-        return Container();
-      },
+          ),
+        ],
+      ),
+      body: BlocBuilder<NewsBloc, NewsState>(
+        builder: (context, state) {
+          if (state is NewsLoading) {
+            context.read<NewsBloc>().add(LoadNews()); // Load the news articles
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is NewsLoaded) {
+            return ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: state.newsArticles.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 2,
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          state.newsArticles[index].title,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          state.newsArticles[index].description,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: ElevatedButton(
+                            onPressed: () {
+                              _showEditDialog(context, state.newsArticles[index].title,
+                                  state.newsArticles[index].description, index);
+                            },
+                            child: const Text("View"),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          }
+          return Container();
+        },
+      ),
     );
   }
 
-  void _showEditDialog(BuildContext context, String newsArticle, int index) {
-    final TextEditingController controller =
-        TextEditingController(text: newsArticle);
+  void _showEditDialog(BuildContext context, String newsTitle, String newsDescription, int index) {
+    final TextEditingController controller = TextEditingController(text: newsTitle);
 
     showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text("News Article"),
+          title: const Text("News Article"),
           content: TextField(
             controller: controller,
-            decoration: InputDecoration(hintText: "Enter news article"),
+            decoration: const InputDecoration(hintText: "Enter news article"),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text("Close"),
+              child: const Text("Close"),
             ),
             TextButton(
               onPressed: () {
                 context.read<NewsBloc>().add(
-                      EditNews(index, controller.text),
+                      EditNews(index, newsTitle, controller.text),
                     );
                 Navigator.of(context).pop();
               },
-              child: Text("Save"),
+              child: const Text("Save"),
             ),
           ],
         );

@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         builder: (context, state) {
           return MaterialApp(
             theme: state.isDarkMode ? ThemeData.dark() : ThemeData.light(),
-            home: HomeScreen(),
+            home: const HomeScreen(),
           );
         },
       ),
@@ -46,9 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    NotesScreen(),
-    NewsScreen(),
-    SettingsScreen(),
+    const NotesScreen(),
+    const NewsScreen(),
+    const SettingsScreen(),
   ];
 
   void _onItemTapped(int index) {

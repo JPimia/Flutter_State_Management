@@ -1,4 +1,3 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
 enum NoteStatus { initial, loading, success, error, edited, deleted }

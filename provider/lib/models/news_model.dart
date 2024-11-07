@@ -1,5 +1,6 @@
 class News {
-  String title;
+  String? title;
+  String? description;
 
-  News({required this.title});
+  News({this.title, this.description});
 }
