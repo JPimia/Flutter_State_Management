@@ -1,4 +1,3 @@
-// notes_actions.dart
 class AddNoteAction {
   final String note;
   AddNoteAction(this.note);

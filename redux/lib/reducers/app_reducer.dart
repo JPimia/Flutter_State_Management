@@ -1,4 +1,3 @@
-// app_reducer.dart
 import '/states/app_state.dart';
 import 'notes_reducer.dart';
 import 'news_reducer.dart';

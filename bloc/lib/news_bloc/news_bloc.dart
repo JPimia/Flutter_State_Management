@@ -10,25 +10,29 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
   ];
 
   NewsBloc() : super(NewsLoading()) {
-    on<LoadNews>((event, emit) {
-      emit(NewsLoaded(_newsArticles));
-    });
+    on<LoadNews>(_onLoadNews);
+    on<EditNews>(_onEditNews);
+    on<AddNews>(_onAddNews);
+  }
 
-    on<EditNews>((event, emit) {
-      if (state is NewsLoaded) {
-        final updatedNewsArticles = List<NewsArticle>.from((state as NewsLoaded).newsArticles);
-        final newsArticle = updatedNewsArticles[event.index];
-        updatedNewsArticles[event.index] = NewsArticle(newsArticle.title, event.description!);
-        emit(NewsLoaded(updatedNewsArticles));
-      }
-    });
+  Future<void> _onLoadNews(event, emit) async {
+    emit(NewsLoaded(_newsArticles));
+  }
 
-    on<AddNews>((event, emit) {
-      if (state is NewsLoaded) {
-        final updatedNewsArticles = List<NewsArticle>.from((state as NewsLoaded).newsArticles);
-        updatedNewsArticles.add(NewsArticle(event.title!, event.description!));
-        emit(NewsLoaded(updatedNewsArticles));
-      }
-    });
+  Future<void> _onEditNews(event, emit) async {
+    if (state is NewsLoaded) {
+      final updatedNewsArticles = List<NewsArticle>.from((state as NewsLoaded).newsArticles);
+      final newsArticle = updatedNewsArticles[event.index];
+      updatedNewsArticles[event.index] = NewsArticle(newsArticle.title, event.description!);
+      emit(NewsLoaded(updatedNewsArticles));
+    }
+  }
+
+  Future<void> _onAddNews(event, emit) async {
+    if (state is NewsLoaded) {
+      final updatedNewsArticles = List<NewsArticle>.from((state as NewsLoaded).newsArticles);
+      updatedNewsArticles.add(NewsArticle(event.title!, event.description!));
+      emit(NewsLoaded(updatedNewsArticles));
+    }
   }
 }
