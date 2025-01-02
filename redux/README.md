@@ -1,4 +1,4 @@
-# bloc_version
+# redux_version
 
 A new Flutter project.
 
